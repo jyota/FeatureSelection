@@ -1,8 +1,8 @@
 mvar<-function(X, Y){	
 	require(psych)
-	# Implements multivariate regression
-	# Y is matrix of dependent variables
-	# X is matrix of independent variables
+	# Implements multivariate regression -- produces two test statistics that are also available with R's MANOVA
+	# Y is matrix of variables that may vary per class (for example, gene expression levels)
+	# X is list or matrix of class variable(s) (for example, binary class specifying cancerous vs. non-cancerous)
 	X_ = matrix(ncol=NCOL(X)+1,nrow=NROW(X))
 	X_[,1]=1
 	X_[,2:(NCOL(X)+1)]=X
