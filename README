@@ -1,2 +1,5 @@
-Aiming to implement multivariate feature selection via Hotelling's T2.
+Multivariate Feature Selection R routines
+Purpose: biomarker selection driven by Hotelling-Lawley Trace statistic or other multivariate statistics
+
+Work in progress...
 
