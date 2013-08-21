@@ -1,29 +1,29 @@
 mvar<-function(X, Y){	
 	require(psych)
 	# Implements multivariate regression -- produces two test statistics that are also available with R's MANOVA
-	# Y is matrix of variables that may vary per class (for example, gene expression levels)
-	# X is list or matrix of class variable(s) (for example, binary class specifying cancerous vs. non-cancerous)
-	X_ = matrix(ncol=NCOL(X)+1,nrow=NROW(X))
-	X_[,1]=1
-	X_[,2:(NCOL(X)+1)]=X
+	# X is matrix of variables that may vary per class (for example, gene expression levels)
+	# Y is vector or matrix of class variable(s) (for example, a vector of binary classes specifying cancerous vs. non-cancerous)
+	Y_ = matrix(ncol=NCOL(Y)+1,nrow=NROW(Y))
+	Y_[,1]=1
+	Y_[,2:(NCOL(Y)+1)]=Y
 
-	BETA = solve(crossprod(X_)) %*% t(X_) %*% Y
+	BETA = solve(crossprod(Y_)) %*% t(Y_) %*% X
 
-	Y_ = X_ %*% BETA
-	ERROR_ = Y - Y_
+	X_ = Y_ %*% BETA
+	ERROR_ = X - X_
 
-	MEAN_Y=matrix(ncol=NCOL(Y),nrow=NROW(Y))
-	if (NCOL(Y)==1){
-		MEAN_Y[,1]=mean(Y)
+	MEAN_X=matrix(ncol=NCOL(X),nrow=NROW(X))
+	if (NCOL(X)==1){
+		MEAN_X[,1]=mean(X)
 	}else {
-	for(k in 1:NCOL(Y)){
-		MEAN_Y[,k]=mean(Y[,k])
+	for(k in 1:NCOL(X)){
+		MEAN_X[,k]=mean(X[,k])
 	}
 	}
 
-	SSCP_regression = crossprod(Y_) - crossprod(MEAN_Y)
+	SSCP_regression = crossprod(X_) - crossprod(MEAN_X)
 	SSCP_residual   = crossprod(ERROR_)
-	SSCP_total      = crossprod(Y) - crossprod(MEAN_Y)
+	SSCP_total      = crossprod(X) - crossprod(MEAN_X)
 
 	WILKS = det(SSCP_residual)/det(SSCP_total)
 	
