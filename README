@@ -1,5 +1,7 @@
 Multivariate Feature Selection R routines
-Purpose: biomarker selection driven by Hotelling-Lawley Trace statistic or other multivariate statistics
+Purpose: biomarker selection driven by Hotelling-Lawley Trace statistic or Wilks Lambda (multivariate parametric approach)
 
-Work in progress...
+Code by Jyota Snyder (jyotas at ccsu dot edu)
+Concepts, approach, & code adapted from Darius Dziuda's 2010 "Data Mining for Genomics & Proteomics" book
+
 
