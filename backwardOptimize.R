@@ -4,9 +4,10 @@ backwardOptimize <- function(x, y, method){
   # (this function returns a possible variable to remove and minLoss value--
   #  if minLoss is less than maxGain from last forwardSelection variable may be dropped) 
   # y is class
-  # method is one of "Hotelling" or "Wilks"
+  # method is one of "Hotelling" or "Wilks" (Wilks may not be useful if backwardOptimization is used)
   # Adapted from Darius Dziuda's 2010 "Data Mining for Genomics & Proteomics" book 
   source("multivariate-regression.R")
+  dropVar=NULL
   if(NCOL(x)>2){
   if(method=="Hotelling"){
       minLoss = mvar(as.matrix(x),y)$HotellingLawleyTrace
@@ -18,8 +19,9 @@ backwardOptimize <- function(x, y, method){
     if(method=="Hotelling"){
       deltaT2 = mvar(as.matrix(subset(x,select=-c(i))),y)$HotellingLawleyTrace
     }
-    if(method=="Wilks"){
+    if(method=="Wilks"){      
       deltaT2 = mvar(as.matrix(subset(x,select=-c(i))),y)$WilksLambda
+      cat(deltaT2,"\n")
     }
     if(deltaT2 <= minLoss){
       minLoss = deltaT2
@@ -30,7 +32,7 @@ backwardOptimize <- function(x, y, method){
   }
   else{
     cat("Predictor set is already 2 variables or less. Cancelling.\n")
-    return(list(dropVar=-1,minLoss=NULL))
+    return(list(dropVar=NULL,minLoss=NULL))
   }
  }
  

@@ -6,13 +6,13 @@ obtainBestInitial <- function(x, y, method){
 	# x is matrix/dataframe of 'predictors' or variables that vary per class
 	# y is matrix/vector of 'response' or class variable(s)
 	# returns column number of x of 'best' initial explanatory variable for class
-	maxResult = 0
-	maxVar    = -1
+	maxGain = 0.0
+	maxVar    = NULL
 	if(method=="Hotelling"){
 		for(i in 1:NCOL(x)){
 			currentTest = mvar(x[,i],y)
-			if(currentTest$Hotelling > maxResult){			
-				maxResult = currentTest$Hotelling
+			if(currentTest$Hotelling > maxGain){			
+				maxGain   = currentTest$Hotelling
 				maxVar    = i
 			}
 		}
@@ -20,8 +20,8 @@ obtainBestInitial <- function(x, y, method){
 	if(method=="Wilks"){
 		for(i in 1:NCOL(x)){
 			currentTest = mvar(x[,i],y)
-			if(currentTest$WilksLambda > maxResult){			
-				maxResult = currentTest$WilksLambda
+			if(currentTest$WilksLambda > maxGain){			
+				maxGain = currentTest$WilksLambda
 				maxVar    = i
 			}
 		}
@@ -36,6 +36,6 @@ obtainBestInitial <- function(x, y, method){
 		maxVar = sample(1:NCOL(x),1)
 	}
 
-	return(maxVar)
+	return(list(maxVar=maxVar,maxGain=maxGain))
 	
 }
