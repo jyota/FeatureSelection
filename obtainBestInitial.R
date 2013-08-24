@@ -1,7 +1,7 @@
 obtainBestInitial <- function(x, y, method){	
 	source("multivariate-regression.R")
 	# Obtain best initial variable for feature selection process.
-	# method can be Hotelling (for Hotelling-Lawley trace), Wilks (for Wilks Lambda), randomForest, or random.
+	# method can be Hotelling (for Hotelling-Lawley trace) or random.
 	# x is matrix/dataframe of 'predictors' or variables that vary per class
 	# y is matrix/vector of 'response' or class variable(s)
 	# returns column number of x of 'best' initial explanatory variable for class
@@ -15,15 +15,6 @@ obtainBestInitial <- function(x, y, method){
 				maxVar    = i
 			}
 		}
-	}
-	if(method=="randomForest"){
-	  require(randomForest)
-		# Obtain variable with greatest decrease in Gini impurity with default rf settings
-		# then calc Hotelling-Lawley trace
-		rf = randomForest(x=x,y=y,importance=TRUE)
-		maxVar = which(colnames(x)==names(rf$importance[,4])[rf$importance[,4]==max(rf$importance[,4])])
-		currentTest = mvar(x[,maxVar],y)
-	         maxGain = currentTest$Hotelling		
 	}
 	if(method=="random"){
 		# Just pick a random column (returns Hotelling-Lawley trace stat)
