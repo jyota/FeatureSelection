@@ -1,7 +1,19 @@
-Multivariate Feature Selection R routines
-Purpose: biomarker selection driven by Hotelling-Lawley Trace statistic or Wilks Lambda (multivariate parametric approach)
+Multivariate feature selection with hybrid heuristic search approach.
+Feature selection is driven by Hotelling-Lawley Trace statistic (parametric).
 
-Code by Jyota Snyder (jyotas at my dot ccsu dot edu)
-Concepts, approach, & code adapted from Darius Dziuda's 2010 "Data Mining for Genomics & Proteomics" book
+Main usage is likely the hybridFeatureSelection function, which takes:
+- Data frame of predictors as x
+- Vector / column of class(es) as y
+- 'start' parameter is method to select first variable for the search (can be 'random', 'Hotelling', or 'randomForest')
+- stopP parameter is number of features to select before ending search
+- stopT2 parameter specifies Hotelling-Lawley trace statistic to reach before ending search
+(meeting either stopP or stopT2 will end search)
+The function performs a heuristic search to find the best (local) optima until it hits one of the stop parameters. 
+
+It is recommended to run the search more than once as it is not a global search. There is an automatic routine I wrote for performing multiple searches in this manner: ensembleFeatureSelection(x, y, n, stopP, stopT2), where n is the number of hybridFeatureSelection searches to run (random starting variable); other parameters are as for the hybridFeatureSelection function. It returns a table of votes per feature based on the multiple heuristic searches performed.
+It is possible that I will add the capacity to perform multiple searches with other R feature selection packages and return votes for features based on multiple feature selection runs.
+
+Code by Jyota Snyder (jyotas at my dot ccsu dot edu).
+Concepts, approach, & code adapted from Darius Dziuda's 2010 "Data Mining for Genomics & Proteomics" book.
 
 
