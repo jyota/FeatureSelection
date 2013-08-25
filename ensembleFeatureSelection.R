@@ -5,10 +5,10 @@ ensembleFeatureSelection <- function(x, y, n, stopP, stopT2){
   latestFeatures = NULL
   for(i in 1:n){
     if(i == 1){
-      listOfFeatures = names(hybridFeatureSelection(x=x,y=y,stopP=stopP,stopT2=stopT2))
+      listOfFeatures = colnames(hybridFeatureSelection(x=x,y=y,stopP=stopP,stopT2=stopT2))
     }else{
       latestFeatures = hybridFeatureSelection(x=x,y=y,stopP=stopP,stopT2=stopT2)
-      listOfFeatures = cbind(listOfFeatures,names(latestFeatures))
+      listOfFeatures = cbind(listOfFeatures,colnames(latestFeatures))
     }
   }
   return(sort(table(listOfFeatures),decreasing=TRUE))

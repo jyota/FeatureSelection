@@ -52,7 +52,7 @@ hybridFeatureSelection <- function(x, y, start="random",stopP, stopT2){
 	currentT2 = currentT2 - minLossStep
       }
     }
-    cat("Iteration: ", i, ", Current stat calc: ", currentT2, "\nVars: ",names(currentSet), "\n")    
+    cat("Iteration: ", i, ", Current stat calc: ", currentT2, "\nVars: ",colnames(currentSet), "\n")    
     i = i + 1
   }
   return(as.data.frame(currentSet))
