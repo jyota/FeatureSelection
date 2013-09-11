@@ -45,8 +45,8 @@ modifiedBagging <- function(x, y, rep=1000, proportion=0.632, start="random",sto
       tmpFit = lda(classes ~ .,data=data.frame(tmpDat,classes=fullInBag[,NCOL(fullInBag)],check.names=FALSE))
       q = cbind(as.factor(fullOOB$y),predict(tmpFit,fullOOB)$class)
       repStats[j,1] = NROW(q[q[,1]==q[,2],])/NROW(fullOOB)
-      repStats[j,2] = NROW(q[q[,1]==q[,2] & q[,1]==2,])/NROW(fullOOB[fullOOB$y==1])
-      repStats[j,3] = NROW(q[q[,1]==q[,2] & q[,1]==1,])/NROW(fullOOB[fullOOB$y==0])
+      repStats[j,2] = NROW(q[q[,1]==q[,2] & q[,1]==2,])/NROW(q[q[,1]==2,])
+      repStats[j,3] = NROW(q[q[,1]==q[,2] & q[,1]==1,])/NROW(q[q[,1]==1,])
       cat("result in accuracy: ", repStats[j,1], " sensitivity: ", repStats[j,2], " specificity: ", repStats[j,3],"\n")
       varsStats[varsStats$Variable %in% colnames(tmpDat),]$Times_Selected = varsStats[varsStats$Variable %in% colnames(tmpDat),]$Times_Selected + 1
   }
