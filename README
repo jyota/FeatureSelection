@@ -10,8 +10,7 @@ Main usage is likely the hybridFeatureSelection function, which takes:
 (meeting either stopP or stopT2 will end search)
 The function performs a heuristic search to find the best (local) optima until it hits one of the stop parameters. 
 
-It is recommended to run the search more than once as it is not a global search. 
-There is a modified bagging routine to obtain estimates of most selected variables in the feature selection as well as estimates for an LDA prediction against out of bag samples. This whole process is still being tweaked a bit but it currently seems to work as expected.
+There is also a modified bagging routine to obtain out of bag estimates for features including LDA classification accuracy for a 2 class scenario (perhaps additional class scenarios will be supported at some time).
 
 Code by Jyota Snyder (jyotas at my dot ccsu dot edu).
 Concepts, approach, hybrid feature selection, and modified bagging schema were adapted into R from Darius Dziuda's 2010 "Data Mining for Genomics & Proteomics" book.
