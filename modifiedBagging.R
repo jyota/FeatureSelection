@@ -10,11 +10,12 @@ modifiedBagging <- function(x, y, rep=1000, proportion=0.632, start="random",sto
   require(MASS)
   repStats = as.data.frame(matrix(ncol=3,nrow=rep))
   colnames(repStats) = c("Accuracy","Sensitivity","Specificity")
-  varsStats = as.data.frame(matrix(ncol=3, nrow=ncol(x)))
-  colnames(varsStats) = c("Variable", "Times_Selected","Perc_Selected")
+  varsStats = as.data.frame(matrix(ncol=4, nrow=ncol(x)))
+  colnames(varsStats) = c("Variable", "Times_Selected","Perc_Selected","Perfect_Selected")
   varsStats[,1] = as.matrix(colnames(x))
   varsStats[,2] = 0.0
   varsStats[,3] = 0.0
+  varsStats[,4] = 0.0
 
   for(j in 1:rep){
       # for now, handles only two class problem
@@ -49,6 +50,9 @@ modifiedBagging <- function(x, y, rep=1000, proportion=0.632, start="random",sto
       repStats[j,3] = NROW(q[q[,1]==q[,2] & q[,1]==1,])/NROW(q[q[,1]==1,])
       cat("result in accuracy: ", repStats[j,1], " sensitivity: ", repStats[j,2], " specificity: ", repStats[j,3],"\n")
       varsStats[varsStats$Variable %in% colnames(tmpDat),]$Times_Selected = varsStats[varsStats$Variable %in% colnames(tmpDat),]$Times_Selected + 1
+      if(repStats[j,1]==1){
+	varsStats[varsStats$Variable %in% colnames(tmpDat),]$Perfect_Selected = varsStats[varsStats$Variable %in% colnames(tmpDat),]$Perfect_Selected + 1
+      }
   }
   varsStats$Perc_Selected = varsStats$Times_Selected / sum(varsStats$Times_Selected)
   return(list(varsStats=varsStats,repStats=repStats))
