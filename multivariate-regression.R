@@ -4,11 +4,14 @@ mvar<-function(X, Y){
 	# X is matrix of variables that may vary per class (for example, gene expression levels)
 	# Y is vector or matrix of class variable(s) (for example, a vector of binary classes specifying cancerous vs. non-cancerous)
 	Y_ = matrix(ncol=NCOL(Y)+1,nrow=NROW(Y))
-	Y_[,1]=1
 	Y_[,2:(NCOL(Y)+1)]=Y
-
+	Y_[,1]=1
+	if(rcond(crossprod(Y_)) < .Machine$double.eps){
+	  return(list(HotellingLawleyTrace=0.0,WilksLambda=0.0))
+	}else{
 	BETA = solve(crossprod(Y_)) %*% t(Y_) %*% X
-
+	}
+	
 	X_ = Y_ %*% BETA
 	ERROR_ = X - X_
 
@@ -29,7 +32,11 @@ mvar<-function(X, Y){
 	
 	# W_CRITICAL = -((NCOL(Y)-NCOL(X)-1-((NCOL(Y)+1-NCOL(X))/2)))*log(WILKS)
 
+	if(rcond(SSCP_residual) < .Machine$double.eps){
+	  return(list(HotellingLawleyTrace=0.0,WilksLambda=0.0))
+	 }else{
 	T2 = tr(SSCP_regression %*% solve(SSCP_residual))
-
+    
 	return(list(HotellingLawleyTrace=T2,WilksLambda=WILKS))
+	  }
 }
