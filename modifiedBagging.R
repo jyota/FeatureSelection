@@ -8,8 +8,8 @@ modifiedBagging <- function(x, y, rep=1000, proportion=0.632, start="random",sto
 # proportion is proportion of x to be in bag, rest will be out of bag
   source("hybridFeatureSelection.R")
   require(MASS)
-  repStats = as.data.frame(matrix(ncol=3,nrow=rep))
-  colnames(repStats) = c("Accuracy","Sensitivity","Specificity")
+  repStats = as.data.frame(matrix(ncol=4,nrow=rep))
+  colnames(repStats) = c("Accuracy","Sensitivity","Specificity", "T2")
   varsStats = as.data.frame(matrix(ncol=4, nrow=ncol(x)))
   colnames(varsStats) = c("Variable", "Times_Selected","Perc_Selected","Perfect_Selected")
   varsStats[,1] = as.matrix(colnames(x))
@@ -29,7 +29,7 @@ modifiedBagging <- function(x, y, rep=1000, proportion=0.632, start="random",sto
       inBagJ2 = inBagJ2[sample(nrow(inBagJ2),size=round(nrow(inBagJ2)*proportion,0),replace=FALSE),]      
       fullInBag = rbind(inBagJ1,inBagJ2)
       # Need to ensure there will not be a inverse singularity below
-      fullInBag = fullInBag[,which(round(colSums(fullInBag),0)!=0)]
+      fullInBag = fullInBag[,which(abs(round(colSums(fullInBag),0))!=0)]
       OOBJ1   = data.frame(x,y=y, check.names=FALSE)
       rownames(OOBJ1) = rownames(x)
       OOBJ1   = OOBJ1[OOBJ1$y==0,]
@@ -48,6 +48,7 @@ modifiedBagging <- function(x, y, rep=1000, proportion=0.632, start="random",sto
       repStats[j,1] = NROW(q[q[,1]==q[,2],])/NROW(fullOOB)
       repStats[j,2] = NROW(q[q[,1]==q[,2] & q[,1]==2,])/NROW(q[q[,1]==2,])
       repStats[j,3] = NROW(q[q[,1]==q[,2] & q[,1]==1,])/NROW(q[q[,1]==1,])
+      repStats[j,4] = mvar(X=as.matrix(tmpDat),Y=as.matrix(fullInBag[,NCOL(fullInBag)]))$HotellingLawleyTrace
       cat("result in accuracy: ", repStats[j,1], " sensitivity: ", repStats[j,2], " specificity: ", repStats[j,3],"\n")
       varsStats[varsStats$Variable %in% colnames(tmpDat),]$Times_Selected = varsStats[varsStats$Variable %in% colnames(tmpDat),]$Times_Selected + 1
       if(repStats[j,1]==1){
