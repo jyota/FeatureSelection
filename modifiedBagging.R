@@ -44,11 +44,12 @@ modifiedBagging <- function(x, y, rep=1000, proportion=0.632, start="random",sto
       tmpDat = hybridFeatureSelection(as.matrix(fullInBag[,1:(NCOL(fullInBag)-1)]),as.matrix(fullInBag[,NCOL(fullInBag)]),start,stopP,stopT2) 
       cat("Beginning LDA fit-- run #: ", j, " ")
       tmpFit = lda(classes ~ .,data=data.frame(tmpDat,classes=fullInBag[,NCOL(fullInBag)],check.names=FALSE))
-      q = cbind(as.factor(fullOOB$y),predict(tmpFit,fullOOB)$class)
-      #cat(" showing ", NROW(q[q[,1]==2,]), " for class 2, ", NROW(q[q[,1]==1,]), " for class 1, ", NROW(q[q[,1]==q[,2] & q[,1]==2,]), " correct class 1,", NROW(q[q[,1]==q[,2] & q[,1]==1,]), " correct class 2,", NROW(q[q[,1]==q[,2] & q[,1]==2,])+NROW(q[q[,1]==q[,2] & q[,1]==1,]), " correctly classified OOB samples.\n")
-      repStats[j,1] = (NROW(q[q[,1]==q[,2] & q[,1]==2,])+NROW(q[q[,1]==q[,2] & q[,1]==1,]))/NROW(fullOOB)
-      repStats[j,2] = NROW(q[q[,1]==q[,2] & q[,1]==2,])/NROW(q[q[,1]==2,])
-      repStats[j,3] = NROW(q[q[,1]==q[,2] & q[,1]==1,])/NROW(q[q[,1]==1,])
+      q = data.frame(y=as.factor(fullOOB$y),predict=predict(tmpFit,fullOOB)$class)
+      cat(" showing ", NROW(q[q[,1]==1,]), " for class 2, ", NROW(q[q[,1]==0,]), " for class 1, ", NROW(q[q[,1]==q[,2] & q[,1]==0,]), " correct class 1,", NROW(q[q[,1]==q[,2] & q[,1]==1,]), " correct class 2,", NROW(q[q[,1]==q[,2] & q[,1]==0,])+NROW(q[q[,1]==q[,2] & q[,1]==1,]), " correctly classified OOB samples.\n")
+      print(q)
+      repStats[j,1] = (NROW(q[q[,1]==q[,2] & q[,1]==1,])+NROW(q[q[,1]==q[,2] & q[,1]==0,]))/NROW(fullOOB)
+      repStats[j,2] = NROW(q[q[,1]==q[,2] & q[,1]==1,])/NROW(q[q[,1]==1,])
+      repStats[j,3] = NROW(q[q[,1]==q[,2] & q[,1]==0,])/NROW(q[q[,1]==0,])
       repStats[j,4] = mvar(X=as.matrix(tmpDat),Y=as.matrix(fullInBag[,NCOL(fullInBag)]))$HotellingLawleyTrace
       cat("result in accuracy: ", repStats[j,1], " sensitivity: ", repStats[j,2], " specificity: ", repStats[j,3],"\n")
       varsStats[varsStats$Variable %in% colnames(tmpDat),]$Times_Selected = varsStats[varsStats$Variable %in% colnames(tmpDat),]$Times_Selected + 1
