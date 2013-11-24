@@ -1,4 +1,4 @@
-modifiedBagging <- function(x, y, rep=1000, proportion=0.632, start="random",stopP,stopT2)
+modifiedBagging <- function(x, y, rep=1000, proportion=0.632, start="random",stopP,stopT2,priors=NULL)
 {
 # Implements modified bagging schema to obtain estimates related to feature selection
 # x is data frame of independent variables
@@ -43,7 +43,11 @@ modifiedBagging <- function(x, y, rep=1000, proportion=0.632, start="random",sto
       cat("Beginning feature selection-- run #: ", j, " in bag samples: ", nrow(fullInBag), " OOB samples: ", nrow(fullOOB), "\n")
       tmpDat = hybridFeatureSelection(as.matrix(fullInBag[,1:(NCOL(fullInBag)-1)]),as.matrix(fullInBag[,NCOL(fullInBag)]),start,stopP,stopT2) 
       cat("Beginning LDA fit-- run #: ", j, " ")
+      if(!is.null(priors)){
+      tmpFit = lda(classes ~ .,data=data.frame(tmpDat,classes=fullInBag[,NCOL(fullInBag)],check.names=FALSE),priors=priors)
+      }else{
       tmpFit = lda(classes ~ .,data=data.frame(tmpDat,classes=fullInBag[,NCOL(fullInBag)],check.names=FALSE))
+      }
       q = data.frame(y=as.factor(fullOOB$y),predict=predict(tmpFit,fullOOB)$class)
       cat(" showing ", NROW(q[q[,1]==1,]), " for class 2, ", NROW(q[q[,1]==0,]), " for class 1, ", NROW(q[q[,1]==q[,2] & q[,1]==0,]), " correct class 1,", NROW(q[q[,1]==q[,2] & q[,1]==1,]), " correct class 2,", NROW(q[q[,1]==q[,2] & q[,1]==0,])+NROW(q[q[,1]==q[,2] & q[,1]==1,]), " correctly classified OOB samples.\n")
       print(q)
