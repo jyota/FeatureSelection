@@ -8,7 +8,7 @@ findInformativeBagging <- function(x, y, rep=100, proportion=0.632, start="rando
   finals = result$varsStats[result$varsStats[,2]>0,1]  
   returnMatrix[1,] = c(1,result$repStats[1,1],result$repStats[1,2],result$repStats[1,3],result$repStats[1,4], t(finals))
   for(i in 2:rep){    
-   cat("Iteration ", i, "..., ", length(finals), " variables removed, ", NCOL(x[,-which(colnames(x) %in% finals)]), " remaining.\n")
+   cat("Iteration ", i, "...\n ")
    result = modifiedBagging(x,y,rep=1,proportion=proportion,start=start,stopP=stopP,stopT2=stopT2,priors=priors)
    finals = c(result$varsStats[result$varsStats[,2]>0,1],finals)
    returnMatrix[i,] = c(i,result$repStats[1,1],result$repStats[1,2],result$repStats[1,3],result$repStats[1,4], t(result$varsStats[result$varsStats[,2]>0,1]))
