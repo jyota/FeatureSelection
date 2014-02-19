@@ -14,7 +14,7 @@ hybridFeatureSelection <- function(x, y, start="random",stopP, stopT2){
     return(NULL)
   }
   pool = x
-  cat("Beginning search for ", stopP, " variables.\n")
+  #cat("Beginning search for ", stopP, " variables.\n")
   currentSet = NULL
   poolSize   = NCOL(x)
   markerSize = 0
@@ -52,7 +52,7 @@ hybridFeatureSelection <- function(x, y, start="random",stopP, stopT2){
 	currentT2 = currentT2 - minLossStep
       }
     }
-    cat("Iteration: ", i, ", Current stat calc: ", currentT2, "\nVars: ",colnames(currentSet), "\n")    
+    #cat("Iteration: ", i, ", Current stat calc: ", currentT2, "\nVars: ",colnames(currentSet), "\n")    
     i = i + 1
   }
   return(as.data.frame(currentSet))
