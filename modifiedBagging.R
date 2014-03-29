@@ -47,7 +47,7 @@ modifiedBagging <- function(x, y, rep=1000, proportion=0.632, start="random",sto
       tmpDat = hybridFeatureSelection(as.matrix(fullInBag[,1:(NCOL(fullInBag)-1)]),as.matrix(fullInBag[,NCOL(fullInBag)]),start,stopP,stopT2) 
       #cat("Beginning LDA fit-- run #: ", j, " ")
       if(!is.null(priors)){
-      tmpFit = lda(classes ~ .,data=data.frame(tmpDat,classes=fullInBag[,NCOL(fullInBag)],check.names=FALSE),priors=priors)
+      tmpFit = lda(classes ~ .,data=data.frame(tmpDat,classes=fullInBag[,NCOL(fullInBag)],check.names=FALSE),prior=priors)
       }else{
       tmpFit = lda(classes ~ .,data=data.frame(tmpDat,classes=fullInBag[,NCOL(fullInBag)],check.names=FALSE))
       }
